@@ -10,6 +10,7 @@ Table of contents
     - [kubectl commands](#kubectl-commands)
     - [Exercise: Interacting with K8S using Kubectl](#exercise-interacting-with-k8s-using-kubectl)
     - [Exercise: My first Pod](#exercise-my-first-pod)
+  - [Main Components](#main-components)
 
 
 ## Prerequisites
@@ -215,3 +216,14 @@ To Delete a Pod:
 ```bash
 kubectl delete pod nginx
 ```
+
+
+## Main Components
+Main Kubernetes components:
+
+![Components in K8S](./images/03_01%20Basic%20Components.jpg)
+
+![Components in K8S](./images/03_02%20Basic%20Components.png)
+
+
+

@@ -1,29 +1,16 @@
-# Components in K8S
+# POD
+
 Table of contents:
-- [Components in K8S](#components-in-k8s)
-  - [POD](#pod)
-    - [Example 1: Nginx Pod](#example-1-nginx-pod)
-    - [Example 2: Stress test Pod](#example-2-stress-test-pod)
-    - [Exercise 1: kubectl dry-run feature](#exercise-1-kubectl-dry-run-feature)
-    - [Exercise 2: xtabel/dotnet-core-publish](#exercise-2-xtabeldotnet-core-publish)
-  - [Replicaset](#replicaset)
-  - [Deployment](#deployment)
-  - [Namespace](#namespace)
-  - [Service](#service)
-  - [Ingress controller](#ingress-controller)
-  - [Special Pod](#special-pod)
-  - [Secrets and config-maps](#secrets-and-config-maps)
+- [POD](#pod)
+  - [What is a POD?](#what-is-a-pod)
+  - [Example 1: Nginx Pod](#example-1-nginx-pod)
+  - [Example 2: Stress test Pod](#example-2-stress-test-pod)
+  - [Lifecycle of Pod Creation](#lifecycle-of-pod-creation)
+  - [Exercise 1: kubectl dry-run feature](#exercise-1-kubectl-dry-run-feature)
+  - [Exercise 2: xtabel/dotnet-core-publish](#exercise-2-xtabeldotnet-core-publish)
 
 
-Main Kubernetes components:
-
-![Components in K8S](./images/03_01%20Basic%20Components.jpg)
-
-
-
-
-## POD
-**What is a POD?**
+## What is a POD?
 
 A Pod is the fundamental component in Kubernetes and serves as the "building block" of the system. It is used to deploy one or more containers and has several key characteristics:
 
@@ -36,7 +23,7 @@ A Pod is the fundamental component in Kubernetes and serves as the "building blo
   - Job
   - InitContainer
 
-### Example 1: Nginx Pod
+## Example 1: Nginx Pod
 This is the file pod-definition.yaml:
 
 ```yaml
@@ -53,7 +40,7 @@ spec:  # Specification section for the Pod
           image: nginx  # Docker image to be used for this container (NGINX in this case)
 ```
 
-### Example 2: Stress test Pod
+## Example 2: Stress test Pod
 Another example of a pod-definition.yaml:
 
 ```yaml
@@ -87,7 +74,23 @@ This pod definition creates a Kubernetes pod named "pod-demo" in the "mem-exampl
 
 In summary, this pod definition creates a pod running a stress-testing tool with resource constraints on memory. The tool starts one virtual machine with 150MB of memory and then hangs (suspends) it after starting. This can be used for testing how the system behaves under high memory usage scenarios.
 
-### Exercise 1: kubectl dry-run feature
+## Lifecycle of Pod Creation
+
+1. Execute `kubectl apply -f pod.yaml` to request the kube-apiserver to create a Pod resource.
+
+2. The **kube-scheduler** continuously monitors Pods that are not yet assigned to any nodes. 
+   - When a Pod is detected, the **kube-scheduler** determines which **node** should run the containers within the Pod. 
+   - It then instructs the **kube-apiserver** to annotate the Pod with the node's name.
+
+3. The **kubelet** monitors Pods assigned to the node where it is running. Upon discovering a Pod, the kubelet interacts with the **Container Runtime Interface (CRI)**, such as containerd in Google Kubernetes Engine (GKE), to instantiate containers.
+
+4. The CRI pulls the necessary container image from the specified repository.
+
+5. Finally, the CRI creates the container within the node, completing the Pod creation process.
+
+![Lifecycle of Pod Creation](./images/03_03%20Lifeccycle%20of%20a%20Pod%20Creation.png)
+
+## Exercise 1: kubectl dry-run feature
 In the context of Kubernetes, a "dry-run" is a feature provided by the `kubectl` command-line tool that allows users to preview the changes that would be applied to a Kubernetes resource without actually executing those changes. When performing a dry-run, `kubectl` simulates the API request for creating, updating, or deleting a resource and returns the resulting YAML representation of the resource after applying the changes, without actually modifying the cluster state.
 
 
@@ -98,7 +101,7 @@ kubectl run nginx --image=nginx --dry-run=client -o yaml > pod.yaml
 
 This command creates a new pod named "nginx" using the NGINX image, but instead of actually creating the pod in the cluster, it performs a dry run and outputs the resulting YAML representation of the pod to the `pod.yaml` file. So it represents the configuration of the pod that would be created if we were to apply it to the Kubernetes cluster.
 
-See result in: `./exercise_01_dry-run/pod.yaml`
+See result in: `./exercise_01/pod.yaml`
 
 
 Dry-run is particularly useful for:
@@ -109,7 +112,7 @@ Dry-run is particularly useful for:
 
 3. **Preventing Accidental Modifications**: Dry-run helps prevent accidental modifications to the cluster by allowing users to see the impact of their actions before committing to them.
 
-### Exercise 2: xtabel/dotnet-core-publish
+## Exercise 2: xtabel/dotnet-core-publish
 Practice 2
 
 1. Generate a POD Manifest YAML (-o yaml) without creating it (--dry-run) for the DockerHub image: xstabel/dotnet-core-publish.
@@ -160,15 +163,3 @@ Practice 2
    kubectl delete pod pod-demo
    ```
 
-
-## Replicaset
-A ReplicaSet (RS) is a Kubernetes object used to maintain a stable set of replicated pods running within a cluster at any given time.
-
-A ReplicaSet is responsible for ensuring that the number of running PODs is as specified.
-
-## Deployment
-## Namespace
-## Service
-## Ingress controller
-## Special Pod
-## Secrets and config-maps

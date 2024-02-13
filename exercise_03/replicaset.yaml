@@ -1,0 +1,34 @@
+# Specifies the API version for ReplicaSet
+apiVersion: apps/v1
+
+# Specifies the kind of resource, in this case, a ReplicaSet
+kind: ReplicaSet
+
+# Metadata for the ReplicaSet, including its name
+metadata:
+  name: front
+
+# Defines the specification for the ReplicaSet
+spec:
+  # Specifies the desired number of replicas for the Pods managed by the ReplicaSet
+  replicas: 3
+
+  # Selector to match Pods managed by this ReplicaSet
+  selector:
+    matchLabels:
+      run: pod-demo
+
+  # Template for creating new Pods managed by the ReplicaSet
+  template:
+    metadata: # Metadata for the Pod template
+      name: pod-name
+      labels:
+        run: pod-demo
+    spec: # Specification for the Pod template
+      containers: # Containers running in the Pod
+      - image: xstabel/dotnet-core-publish
+        name: pod-demo
+        ports:
+        - containerPort: 8080
+      dnsPolicy: ClusterFirst # DNS policy for the Pod
+      restartPolicy: Always # Restart policy for the Pod
