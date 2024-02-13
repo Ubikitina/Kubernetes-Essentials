@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: envar-dhack2
+spec:
+  containers:
+  - name: env-print-dh
+    image: bash
+    command: ["echo"]
+    args:
+      - "DEMO_GREETING: $(echo $DEMO_GREETING)"
+      - "DEMO_FAREWELL: $(echo $DEMO_FAREWELL)"
+    env:
+      - name: DEMO_GREETING
+        value: "test_greeting_value"
+      - name: DEMO_FAREWELL
+        value: "test_farewell_value"

@@ -1,6 +1,6 @@
 # Other Concepts
 
-## Field Selectors (it is not a component)
+## Commands: Field Selectors
 
 Field selectors, along with selectors in general, enable you to choose Kubernetes resources based on the value of one or more resource fields.
 
@@ -33,3 +33,13 @@ kubectl get statefulsets,services --all-namespaces --field-selector metadata.nam
 ```
 
 These commands demonstrate how to effectively use field selectors to filter Kubernetes resources based on specific criteria.
+
+  
+## Service
+
+
+## Ingress controller
+
+
+## Special Pod
+
